@@ -1,0 +1,23 @@
+{% extends 'app.html' %}
+{% block content1 %}
+<form method="POST" >
+  {% csrf_token %}
+<!--     {{ form.as_p }}-->
+    <h1>LOGIN PAGE</h1><br>
+  <div class="container mx-29 my-39">
+      <div class="mb-3">
+    <label for="exampleInputEmail1" class="form-label">UserName</label>
+    <input type="text"  required name="name" value="{{ form.email.value }}" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+    <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+  </div>
+  <div class="mb-3">
+    <label for="exampleInputPassword1" class="form-label">Password</label>
+    <input type="password" required  name="password" value="{{ form.password.value }}"  class="form-control" id="exampleInputPassword1">
+  </div>
+     <button type="submit" class="btn btn-primary">Login</button>
+     <a href='signup' class="btn btn-dark">New Register</a>
+    </div>
+    </div>
+</form>
+
+{% endblock %}

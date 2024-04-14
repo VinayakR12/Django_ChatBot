@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>This is api data</h1>
+<div id="apidata"></div>
+
+</body>
+<script>
+    var ulElement = document.getElementById('jsonList');
+
+async function displayTrainInfo() {
+  try {
+    const url = 'https://irctc1.p.rapidapi.com/api/v1/getTrainSchedule?trainNo=12936';
+    const options = {
+      method: 'GET',
+      headers: {
+        'X-RapidAPI-Key': '934b033c78msh57b8fbc710ef027p190832jsn2c99ae917f6d',
+        'X-RapidAPI-Host': 'irctc1.p.rapidapi.com'
+      }
+    };
+
+    const response = await fetch(url, options);
+    const info = await response.json();
+    console.log(info);
+document.write(info.error.message);                       // remove it is testing purpose
+    const formHtml = `
+      Type: ${info.data.trainType} <br>
+      Number: ${info.data.trainNumber} <br>
+      Name: ${info.data.trainName}
+    `;
+console.log(info.data.route.stop)
+    for (let trainStop of info.data.route) { // Use const for loop variable
+      formHtml += `
+        <div class="card w-50">
+          <div class="card-body">
+            <h3 class="card-title">Route</h3>
+            <p class="card-text">Today Station: ${trainStop.today_sta}</p>
+            <p class="card-text">Train Src: ${trainStop.train_src}</p>
+            <p class="card-text">Station Name: ${trainStop.station_name}</p>
+            <p class="card-text">Station Code: ${trainStop.station_code}</p>
+            <p class="card-text">State Name: ${trainStop.state_name}</p>
+            <p class="card-text">State Code: ${trainStop.state_code}</p>
+            <p class="card-text">Platform Number: ${trainStop.platform_number}</p>
+          </div>
+        </div>
+      `;
+    }
+
+    apidata.innerHTML = formHtml;
+
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    document.write("Error :"+ error.message);
+  }
+}
+
+
+displayTrainInfo();
+</script>
+</html>

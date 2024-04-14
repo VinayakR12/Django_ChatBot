@@ -1,0 +1,42 @@
+{% extends 'app.html' %}
+{% block css %}
+
+{% endblock %}
+
+{% block content1 %}
+<form method="POST" >
+  {% csrf_token %}
+<!--     {{ form.as_p }}-->
+  <h1 >Registration Form </h1><br>
+  <div class="container mx-59 my-79">
+  <div class="mb-3 mx-10 my-20">
+    <label for="exampleInputEmail1" class="form-label"> Name </label>
+    <input type="text"  required name="name"  value="{{form.username.value}}" class="form-control" id="exampleEmail1" aria-describedby="emailHelp">
+    <span class="text-danger">{{form.username.errors}}</span>
+  </div>
+  <div class="mb-3">
+    <label for="exampleInputEmail1" class="form-label"> Phone No </label>
+    <input type="text" required  name="phone"  value="{{form.number.value}}" class="form-control" id="exeEmail1" aria-describedby="emailHelp">
+      <span class="text-danger">{{form.number.errors}}</span>
+  </div>
+  <div class="mb-3">
+    <label for="exampleInputEmail1" class="form-label">Email address</label>
+    <input type="email"required  name="email" value="{{form.email.value}}" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+        <span class="text-danger">{{form.email.errors}}</span>
+    <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+  </div>
+  <div class="mb-3">
+    <label for="exampleInputPassword1" class="form-label">Password</label>
+    <input type="password"  required name="pass" value="{{form.password.value}}" class="form-control" id="exampleInputPassword1">
+      <span class="text-danger">{{form.password.errors}}</span>
+  </div>
+  <div class="mb-3 form-check">
+    <input type="checkbox" name="box" class="form-check-input" id="exampleCheck1">
+    <label class="form-check-label" for="exampleCheck1">Check me out</label>
+  </div>
+ <button type="submit" class="btn btn-primary">Submit</button>
+        <a href='login' class="btn btn-success" > Go to Login </a>
+    </div>
+</form>
+
+{% endblock %}

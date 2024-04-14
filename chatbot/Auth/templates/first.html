@@ -1,0 +1,152 @@
+{% extends 'app.html' %}
+{% block css %}
+<style>
+  .prompt {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    padding: 5px;
+    border-top: 10px solid #dee2e6;
+    background-color:white;
+  }
+</style>
+{% endblock %}
+
+{% block content1 %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  {% csrf_token %}
+  <a class="navbar-brand" href="#">Chatbot</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+    <a class="navbar-brand" href="#"></a>
+    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+      <li class="nav-item active">
+        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Link</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link disabled" href="#">Disabled</a>
+      </li>
+    </ul>
+      <form class="form-inline my-2 my-lg-0">
+      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+      <button class="btn btn-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+  </div>
+</nav>
+<div class="container " id="content"  >
+  <h1>Hello, {{ request.GET.name }}</h1>
+  <h3>How Can I Help You Today?</h3>
+  <h1>It is {{ result }}</h1>
+</div>
+<div class="prompt">
+  <form class="form-inline align-self-end">
+  <label class="my-1 mr-2" for="inlineFormCustomSelectPref">Preference</label>
+  <select id="sel" class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
+    <option selected>Choose...</option>
+    <option  value="1">History</option>
+    <option  value="Book">Ticket Book</option>
+    <option value="Schedule">Train Schedule</option>
+   <option value="MyTicket">MyTicket</option>
+  </select>
+
+  <div class="custom-control custom-checkbox my-1 mr-sm-2">
+    <input type="checkbox" class="custom-control-input" id="customControlInline">
+  </div>
+
+  <button type="submit" id="sub" class="btn btn-primary my-1">Submit</button>
+</form>
+</div>
+{% endblock %}
+
+{% block javascript %}
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var submitButton = document.getElementById('sub');
+    submitButton.addEventListener('click', function(event) {
+      event.preventDefault();
+      var selectElement = document.getElementById('sel');
+      var displayContainer = document.getElementById('content');
+      var selectedValue = selectElement.value;
+
+      if(selectedValue === "1") {
+        event.preventDefault();
+        var newDiv = document.createElement("div");
+        var contentText = document.createTextNode("Hello, this is the appended div!");
+        newDiv.appendChild(contentText);
+        displayContainer.appendChild(newDiv);
+      }
+
+
+      else if(selectedValue === "Book") {
+            event.preventDefault();
+            const formHtml = `
+            <br><br>
+    <h1>Bus Ticket Booking Form</h1>
+    <form method="POST" class="card px-10 mx-3">
+     <div class="card-body">
+        {% csrf_token %}
+         <label for="name">Name    :</label>
+        <input type="text" id="name" name="name11" value={{request.GET.name}} required><br>
+        <label  for="source">Source   :</label>
+        <input type="text"  id="source" name="source" required><br>
+        <label  for="destination">Destination:</label>
+        <input type="text" id="destination" name="destination" required><br>
+        <label for="seatType">Seat Type:</label>
+        <select id="seatType" name="seatType">
+            <option value="standard">Standard</option>
+            <option value="luxury">Luxury</option>
+            <option value="sleeper">Sleeper</option>
+        </select><br>
+
+        <button type="submit" class="btn btn-success">Book Ticket</button>
+    </form></div><br>
+            `;
+            displayContainer.innerHTML = formHtml;
+        }
+
+
+      else if(selectedValue === "MyTicket"){
+        event.preventDefault();
+        var newDoc =`
+        <h1>My Tickets</h1><br>
+
+             {% csrf_token %}
+
+{% for r in data %}
+{% if r.name == request.GET.name %}
+<div class="card w-50">
+  <div class="card-body">
+    <h3 class="card-title">Ticket</h3>
+    <p class="card-text">Name : {{r.name}}</p>
+    <p class="card-text">Source : {{r.source}}</p>
+    <p class="card-text">Destination : {{r.destination}}</p>
+    <p class="card-text">seatType : {{r.seatType}}</p>
+    <a href="/delete/{{r.id}}" class="btn btn-danger">Delete</a>
+  </div>
+</div>
+{% endif %}
+{% endfor %}
+            `;
+
+        displayContainer.innerHTML =newDoc;
+      }
+
+else if (selectedValue == "Schedule") {
+window.location.href=`/api`;
+}
+
+
+      else{
+        displayContainer.textContent = "not found....";
+      }
+    });
+  });
+</script>
+{% endblock %}
